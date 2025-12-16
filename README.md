@@ -53,11 +53,14 @@ http://localhost:8888
 ```
 GET /api
 ```
-
+**调用示例**
+```
+https://you-domain/api?ip=1.1.1.1&port=443&host=cloudflare.com&wsPath=%2F
+```
 常用参数：
 
 - `ip`：IP / 域名 / 域名:端口
-- `port`：端口（默认 443）
+- `port`：端口（不填默认 443）
 - `host`：SNI Host（可选）
 - `wsPath`：WebSocket 路径（可选）
 
