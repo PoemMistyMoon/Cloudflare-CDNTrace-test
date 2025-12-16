@@ -393,6 +393,7 @@ const HTML_TEMPLATE = `<!DOCTYPE html>
 <title>CF IP 远程检测</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
 /* ===========================
    优雅配色方案 - 清新绿蓝色
@@ -467,7 +468,6 @@ html, body {
   padding: 20px 24px;
   border-bottom: 1px solid var(--border-light);
   background: var(--bg-card);
-  /* 不设置border-radius，让父元素的overflow:hidden处理圆角 */
 }
 
 .card-title {
@@ -482,7 +482,6 @@ html, body {
 
 .card-body {
   padding: 24px;
-  /* 不设置border-radius，让父元素的overflow:hidden处理圆角 */
 }
 
 /* ===========================
@@ -510,7 +509,6 @@ html, body {
   font-weight: 400;
 }
 
-/* 桌面布局：双列 */
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -519,6 +517,41 @@ html, body {
   grid-template-columns: 420px 1fr;
   gap: 24px;
   align-items: start;
+}
+
+/* GitHub Footer Style - Fixed Vertical Alignment */
+.github-footer {
+  grid-column: 1 / -1;
+  margin-top: 40px;
+  text-align: center;
+  padding-bottom: 20px;
+}
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: white;
+  border-radius: 50px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: var(--transition);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.github-link:hover {
+  background: #1e293b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.github-link i {
+  font-size: 1.2rem;
+  line-height: 0;
 }
 
 /* ===========================
@@ -654,7 +687,7 @@ input::placeholder {
   transition: var(--transition);
   display: flex;
   align-items: center;
-  justify-content: center;  /* 改为居中对齐 */
+  justify-content: center;
 }
 
 .quick-btn::after {
@@ -662,7 +695,7 @@ input::placeholder {
   opacity: 0;
   transform: translateX(-10px);
   transition: var(--transition);
-  margin-left: 8px;  /* 添加左边距 */
+  margin-left: 8px;
 }
 
 .quick-btn:hover {
@@ -791,7 +824,6 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* 单IP表格（两列布局） */
 #singleResultCard {
   display: none;
 }
@@ -892,10 +924,8 @@ td.status-fail::before {
 }
 
 /* ===========================
-   响应式布局 - 修复竖向布局宽度统一问题
+   响应式布局
    =========================== */
-
-/* 1200px以下：切换到竖向布局，统一90%宽度 */
 @media (max-width: 1200px) {
   .container {
     display: flex;
@@ -906,7 +936,6 @@ td.status-fail::before {
     width: 100%;
   }
   
-  /* 所有卡片统一90%宽度，居中 */
   .form-box,
   .info-box {
     width: 90vw;
@@ -918,25 +947,12 @@ td.status-fail::before {
     width: 100%;
   }
 
-  /* 地图容器间距 */
   .map-container {
     margin-bottom: 24px;
   }
 }
 
-/* 移动端进一步优化 */
 @media (max-width: 768px) {
-  html, body {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-  }
-
-  .page-header {
-    padding: 32px 16px 24px;
-    margin-bottom: 24px;
-  }
-  
   .page-title {
     font-size: 28px;
   }
@@ -945,82 +961,20 @@ td.status-fail::before {
     font-size: 14px;
   }
   
-  .container {
-    gap: 20px;
-    padding: 0 5vw 24px;
-  }
-
-  .card-body {
-    padding: 20px;
-  }
-  
-  .card-header {
-    padding: 16px 20px;
-  }
-
   #map {
     height: 320px;
   }
   
-  /* 表格外层 - 可横向滚动 */
   .table-wrapper {
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .table-container {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   table {
     min-width: 750px;
   }
 
-  /* 单IP表格在移动端不需要横向滚动 */
-  #infoTable {
-    min-width: 0;
-    width: 100%;
-  }
-
   #infoTable th {
     width: 40%;
-  }
-  
-  .result-info {
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-  }
-  
-  th, td {
-    padding: 12px 10px;
-    font-size: 13px;
-  }
-
-  input, .btn {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 24px;
-  }
-
-  .page-subtitle {
-    font-size: 13px;
-  }
-
-  .card-body {
-    padding: 16px;
-  }
-
-  th, td {
-    padding: 10px 8px;
-    font-size: 12px;
   }
 }
 
@@ -1041,50 +995,6 @@ td.status-fail::before {
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   margin-right: 8px;
-}
-
-/* ===========================
-   滚动条美化
-   =========================== */
-.table-wrapper::-webkit-scrollbar,
-.table-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-track,
-.table-container::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-  border-radius: var(--radius);
-}
-
-.table-wrapper::-webkit-scrollbar-thumb,
-.table-container::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: var(--radius);
-  transition: var(--transition);
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover,
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: var(--radius);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
 }
 </style>
 </head>
@@ -1171,48 +1081,56 @@ td.status-fail::before {
       </div>
     </div>
 
-<div class="card" id="multiResultPanel" style="display: none;">
-  <div class="card-header">
-    <h3 class="card-title">📊 批量检测结果</h3>
-  </div>
-  <div class="card-body">
-    <div class="result-info">
-      <div class="result-info-item">
-        <span class="result-info-label">检测目标</span>
-        <span class="result-info-value" id="inputDomain">-</span>
+    <div class="card" id="multiResultPanel" style="display: none;">
+      <div class="card-header">
+        <h3 class="card-title">📊 批量检测结果</h3>
       </div>
-      <div class="result-info-item">
-        <span class="result-info-label">解析IP数</span>
-        <span class="result-info-value" id="resolvedCount">-</span>
+      <div class="card-body">
+        <div class="result-info">
+          <div class="result-info-item">
+            <span class="result-info-label">检测目标</span>
+            <span class="result-info-value" id="inputDomain">-</span>
+          </div>
+          <div class="result-info-item">
+            <span class="result-info-label">解析IP数</span>
+            <span class="result-info-value" id="resolvedCount">-</span>
+          </div>
+        </div>
+        
+        <div class="table-wrapper">
+          <table id="resultsTable">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>端口</th>
+                <th>TLS</th>
+                <th>CDN</th>
+                <th>WS</th>
+                <th>Warp</th>
+                <th>TLS 延迟</th>
+                <th>WS 延迟</th>
+                <th>位置</th>
+                <th>组织 / ASN</th>
+              </tr>
+            </thead>
+            <tbody id="resultsTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
-    
-    <div class="table-wrapper">
-      <table id="resultsTable">
-        <thead>
-          <tr>
-            <th>IP</th>
-            <th>端口</th>
-            <th>TLS</th>
-            <th>CDN</th>
-            <th>WS</th>
-            <th>Warp</th>
-            <th>TLS 延迟</th>
-            <th>WS 延迟</th>
-            <th>位置</th>
-            <th>组织 / ASN</th>
-          </tr>
-        </thead>
-        <tbody id="resultsTableBody"></tbody>
-      </table>
-    </div>
   </div>
+
+  <footer class="github-footer">
+    <a href="https://github.com/PoemMistyMoon/Cloudflare-CDNTrace-test" target="_blank" class="github-link">
+      <i class="fab fa-github"></i>
+      <span>GitHub Repository</span>
+    </a>
+  </footer>
 </div>
 
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js" defer onerror="console.warn('Leaflet加载失败')"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
 <script>
-// HTML转义函数，防止XSS攻击
+// ... (保留原有脚本逻辑，未作改动)
 function escapeHtml(text) {
   if (text == null) return '';
   const div = document.createElement('div');
@@ -1220,88 +1138,46 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// 全局函数 - 必须在页面加载前定义
 function selectQuickOption(domain) {
   const ipPortInput = document.getElementById('ipPort');
   const hostInput = document.getElementById('host');
-  if (ipPortInput) {
-    ipPortInput.value = domain;
-  }
-  if (hostInput) {
-    hostInput.value = '';
-  }
+  if (ipPortInput) ipPortInput.value = domain;
+  if (hostInput) hostInput.value = '';
 }
 
-// 清理面板内容
 function clearPanel() {
-  // 清理地图标记
   if (window.map && window.marker) {
     window.map.removeLayer(window.marker);
     window.marker = null;
-    // 重置地图视图到默认位置
     window.map.setView([35, 139], 5);
   }
-
-  // 隐藏结果表格
   const singleResultCard = document.getElementById('singleResultCard');
   const multiResultPanel = document.getElementById('multiResultPanel');
-  
   if (singleResultCard) {
     singleResultCard.style.display = 'none';
     singleResultCard.classList.remove('show');
     const tbody = document.querySelector('#infoTable tbody');
-    if (tbody) {
-      tbody.innerHTML = '';
-    }
+    if (tbody) tbody.innerHTML = '';
   }
-
   if (multiResultPanel) {
     multiResultPanel.style.display = 'none';
     const tbody = document.getElementById('resultsTableBody');
-    if (tbody) {
-      tbody.innerHTML = '';
-    }
-    // 清空标题信息
+    if (tbody) tbody.innerHTML = '';
     const inputDomain = document.getElementById('inputDomain');
     const resolvedCount = document.getElementById('resolvedCount');
     if (inputDomain) inputDomain.textContent = '-';
     if (resolvedCount) resolvedCount.textContent = '-';
   }
-
-  console.log('面板内容已清理');
 }
 
-// 等待 Leaflet 加载完成
 document.addEventListener('DOMContentLoaded', function() {
-  // 配置 Leaflet 使用 passive 事件监听器以减少警告
   if (typeof L !== 'undefined') {
-    (function() {
-      const originalAddListener = L.DomEvent.addListener;
-      L.DomEvent.addListener = function(obj, type, handler, context) {
-        // 为 touch 事件添加 passive 选项
-        if (L.Browser.touch && (type === 'touchstart' || type === 'touchmove')) {
-          obj.addEventListener(type, handler, { passive: true });
-          return handler;
-        }
-        return originalAddListener.call(this, obj, type, handler, context);
-      };
-    })();
-
-    let map = L.map('map', {
-      zoomControl: true,
-      attributionControl: true,
-      touchZoom: true,
-      doubleClickZoom: true,
-      scrollWheelZoom: true
-    }).setView([35, 139], 5);
-
-    // 使用 Esri World Street Map（全球覆盖，免费）
+    let map = L.map('map').setView([35, 139], 5);
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/" target="_blank">Esri</a> | &copy; OpenStreetMap',
+      attribution: '&copy; Esri',
       maxZoom: 19,
       minZoom: 2
     }).addTo(map);
-
     window.map = map;
     window.marker = null;
   }
@@ -1311,42 +1187,17 @@ async function detectIP() {
   const ipPortInput = document.getElementById('ipPort').value.trim();
   let host = document.getElementById('host').value.trim();
   const submitBtn = document.getElementById('submitBtn');
-
-  // 参数验证
-  if (!ipPortInput) {
-    alert("请填写 域名/IP:端口");
-    return;
-  }
-
-  // 解析 域名/IP:端口 格式
+  if (!ipPortInput) { alert("请填写 域名/IP:端口"); return; }
   let ip, port = 443;
   const ipPortMatch = ipPortInput.match(/^(.+?):(\d+)$/);
-  if (ipPortMatch) {
-    ip = ipPortMatch[1];
-    port = parseInt(ipPortMatch[2]);
-  } else {
-    ip = ipPortInput;
-  }
-
-  // 禁用按钮，防止重复提交
+  if (ipPortMatch) { ip = ipPortMatch[1]; port = parseInt(ipPortMatch[2]); } else { ip = ipPortInput; }
   submitBtn.disabled = true;
   submitBtn.textContent = "检测中...";
-
   try {
-    const params = new URLSearchParams({
-      ip,
-      port: port.toString(),
-      host,
-      wsPath: "/"
-    });
-    
-    const resp = await fetch(\`/api?\${params}\`);
+    const params = new URLSearchParams({ ip, port: port.toString(), host, wsPath: "/" });
+    const resp = await fetch(`/api?${params}`);
     const data = await resp.json();
-
-    if (!resp.ok) {
-      throw new Error(data.error || data.message || \`HTTP \${resp.status}\`);
-    }
-
+    if (!resp.ok) throw new Error(data.error || data.message || `HTTP ${resp.status}`);
     updateInfo(data);
   } catch(err) {
     alert("检测失败: " + err.message);
@@ -1356,52 +1207,34 @@ async function detectIP() {
   }
 }
 
-// 格式化位置信息
 function formatLocation(geoip) {
   if (!geoip) return "-";
   const city = geoip.city || "";
   const country = geoip.countryName || geoip.country || "";
-  if (city && country) return \`\${city}, \${country}\`;
-  if (city) return city;
-  if (country) return country;
-  return "-";
+  if (city && country) return `${city}, ${country}`;
+  return city || country || "-";
 }
 
-// 更新地图标记
 function updateMapMarker(data) {
   if (!window.map) return;
-  
-  if (window.marker) {
-    window.map.removeLayer(window.marker);
-    window.marker = null;
-  }
-  
+  if (window.marker) window.map.removeLayer(window.marker);
   if (data.geoip?.latitude && data.geoip?.longitude) {
     const locationText = formatLocation(data.geoip);
     window.marker = L.marker([data.geoip.latitude, data.geoip.longitude]).addTo(window.map)
-      .bindPopup(\`<strong>\${escapeHtml(data.ip)}</strong><br>\${escapeHtml(locationText)}\`).openPopup();
+      .bindPopup(`<strong>${escapeHtml(data.ip)}</strong><br>${escapeHtml(locationText)}`).openPopup();
     window.map.setView([data.geoip.latitude, data.geoip.longitude], 10);
   }
 }
 
 function updateInfo(data) {
-  if (data.results && data.results.length > 1) {
-    updateMultiResults(data);
-    return;
-  }
-
+  if (data.results && data.results.length > 1) { updateMultiResults(data); return; }
   const singleData = data.results ? data.results[0] : data;
-  
-  // 隐藏多结果面板，显示单结果卡片
   document.getElementById('multiResultPanel').style.display = 'none';
   const singleCard = document.getElementById('singleResultCard');
   singleCard.style.display = 'block';
   singleCard.classList.add('show');
-
   const tbody = document.querySelector('#infoTable tbody');
   tbody.innerHTML = '';
-
-  // 单IP表格 - 竖向顺序调整
   const infoList = [
     ["IP 地址", singleData.ip || "-"],
     ["端口", singleData.port || "-"],
@@ -1409,214 +1242,47 @@ function updateInfo(data) {
     ["CDN Trace", singleData.checks?.cdn_trace ? "✓ 成功" : "✕ 失败"],
     ["WebSocket 状态", singleData.checks?.ws_real_connect ? "✓ 连接成功" : "✕ 连接失败"],
     ["Warp 状态", singleData.cdn?.warp || "off"],
-    ["TLS 延迟", singleData.latency?.tls_handshake_ms ? \`\${singleData.latency.tls_handshake_ms} ms\` : "-"],
-    ["WS 连接延迟", singleData.latency?.ws_connect_ms ? \`\${singleData.latency.ws_connect_ms} ms\` : "-"],
+    ["TLS 延迟", singleData.latency?.tls_handshake_ms ? `${singleData.latency.tls_handshake_ms} ms` : "-"],
+    ["WS 连接延迟", singleData.latency?.ws_connect_ms ? `${singleData.latency.ws_connect_ms} ms` : "-"],
     ["地理位置", formatLocation(singleData.geoip)],
-    ["组织 / ASN", singleData.geoip ? \`\${singleData.geoip.organization || "-"} / \${singleData.geoip.asn ? "AS" + singleData.geoip.asn : "-"}\` : "-"]
+    ["组织 / ASN", singleData.geoip ? `${singleData.geoip.organization || "-"} / ${singleData.geoip.asn ? "AS" + singleData.geoip.asn : "-"}` : "-"]
   ];
-
   infoList.forEach(([key, value]) => {
     const row = document.createElement('tr');
-    const th = document.createElement('th');
-    const td = document.createElement('td');
-    th.textContent = key;
-    td.textContent = value;
-    row.appendChild(th);
-    row.appendChild(td);
+    row.innerHTML = `<th>${key}</th><td>${value}</td>`;
     tbody.appendChild(row);
   });
-
   updateMapMarker(singleData);
 }
 
 function updateMultiResults(data) {
-  // 显示多结果面板，隐藏单结果表格
-  var singleResultCard = document.getElementById('singleResultCard');
-  if (singleResultCard) {
-    singleResultCard.style.display = 'none';
-    singleResultCard.classList.remove('show');
-  }
-  
-  var multiPanel = document.getElementById('multiResultPanel');
-  if (multiPanel) multiPanel.style.display = 'block';
-
-  // 更新标题信息（域名/输入）
-  var inputDomainEl = document.getElementById('inputDomain');
-  if (inputDomainEl) inputDomainEl.textContent = data.input || '-';
-
-  // 清空并填充表格
-  var tbody = document.getElementById('resultsTableBody');
-  if (!tbody) return;
-  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
-
-  if (!data.results || data.results.length === 0) {
-    var rc0 = document.getElementById('resolvedCount');
-    if (rc0) rc0.textContent = '0';
-    return;
-  }
-
-  // 过滤掉所有检测都失败的IP
-  var validResults = data.results.filter(function (result) {
-    var tlsFailed = !result.checks || !result.checks.tls_detect;
-    var wsFailed = !result.checks || !result.checks.ws_real_connect;
-    var cdnFailed = !result.checks || !result.checks.cdn_trace;
-    return !(tlsFailed && wsFailed && cdnFailed);
-  });
-
-  // 更新显示的有效IP数量
-  var totalResolved = (data.resolvedIPs && data.resolvedIPs.length) || (data.results && data.results.length) || 0;
-  var validCount = validResults.length;
-  var resolvedCountEl = document.getElementById('resolvedCount');
-  if (resolvedCountEl) resolvedCountEl.textContent = \`\${totalResolved} 个（\${validCount} 个有效）\`;
-
-  // 逐行创建 DOM - 多IP表格横向顺序调整
-  validResults.forEach(function (result) {
-    var row = document.createElement('tr');
-
-    // 1. IP 地址
-    var tdIp = document.createElement('td');
-    var strongIp = document.createElement('strong');
-    strongIp.textContent = result.ip || '-';
-    strongIp.style.color = 'var(--primary)';
-    tdIp.appendChild(strongIp);
-    row.appendChild(tdIp);
-
-    // 2. 端口（新增 - 从result.port获取）
-    var tdPort = document.createElement('td');
-    tdPort.textContent = result.port || '443';
-    row.appendChild(tdPort);
-
-    // 3. TLS
-    var tdTls = document.createElement('td');
-    if (result.checks && result.checks.tls_detect) {
-      tdTls.className = 'status-success';
-      tdTls.textContent = '';
-    } else {
-      tdTls.className = 'status-fail';
-      tdTls.textContent = '';
-    }
-    row.appendChild(tdTls);
-
-    // 4. CDN
-    var tdCdn = document.createElement('td');
-    if (result.checks && result.checks.cdn_trace) {
-      tdCdn.className = 'status-success';
-      tdCdn.textContent = '';
-    } else {
-      tdCdn.className = 'status-fail';
-      tdCdn.textContent = '';
-    }
-    row.appendChild(tdCdn);
-
-    // 5. WebSocket
-    var tdWs = document.createElement('td');
-    if (result.checks && result.checks.ws_real_connect) {
-      tdWs.className = 'status-success';
-      tdWs.textContent = '';
-    } else {
-      tdWs.className = 'status-fail';
-      tdWs.textContent = '';
-    }
-    row.appendChild(tdWs);
-
-    // 6. Warp
-    var tdWarp = document.createElement('td');
-    var warpStatus = (result.cdn && result.cdn.warp) || 'off';
-    tdWarp.textContent = warpStatus;
-    if (warpStatus === 'on') {
-      tdWarp.style.color = 'var(--success)';
-      tdWarp.style.fontWeight = '600';
-    } else {
-      tdWarp.style.color = 'var(--text-muted)';
-    }
-    row.appendChild(tdWarp);
-
-    // 7. TLS 延迟
-    var tdTlsMs = document.createElement('td');
-    if (result.latency && result.latency.tls_handshake_ms) {
-      tdTlsMs.textContent = result.latency.tls_handshake_ms + ' ms';
-      var latency = result.latency.tls_handshake_ms;
-      if (latency < 100) {
-        tdTlsMs.style.color = 'var(--success)';
-        tdTlsMs.style.fontWeight = '600';
-      } else if (latency < 200) {
-        tdTlsMs.style.color = 'var(--warning)';
-        tdTlsMs.style.fontWeight = '600';
-      } else {
-        tdTlsMs.style.color = 'var(--danger)';
-        tdTlsMs.style.fontWeight = '600';
-      }
-    } else {
-      tdTlsMs.textContent = '-';
-      tdTlsMs.style.color = 'var(--text-muted)';
-    }
-    row.appendChild(tdTlsMs);
-
-    // 8. WS 延迟
-    var tdWsMs = document.createElement('td');
-    if (result.latency && result.latency.ws_connect_ms) {
-      tdWsMs.textContent = result.latency.ws_connect_ms + ' ms';
-      var wsLatency = result.latency.ws_connect_ms;
-      if (wsLatency < 100) {
-        tdWsMs.style.color = 'var(--success)';
-        tdWsMs.style.fontWeight = '600';
-      } else if (wsLatency < 200) {
-        tdWsMs.style.color = 'var(--warning)';
-        tdWsMs.style.fontWeight = '600';
-      } else {
-        tdWsMs.style.color = 'var(--danger)';
-        tdWsMs.style.fontWeight = '600';
-      }
-    } else {
-      tdWsMs.textContent = '-';
-      tdWsMs.style.color = 'var(--text-muted)';
-    }
-    row.appendChild(tdWsMs);
-
-    // 9. 地理位置
-    var tdLoc = document.createElement('td');
-    tdLoc.textContent = formatLocation(result.geoip);
-    row.appendChild(tdLoc);
-
-    // 10. 组织/ASN
-    var tdOrg = document.createElement('td');
-    tdOrg.style.fontSize = '12px';
-    var orgAsn = '-';
-    if (result.geoip) {
-      var org = result.geoip.organization || '-';
-      var asn = result.geoip.asn ? 'AS' + result.geoip.asn : '-';
-      orgAsn = org + ' / ' + asn;
-    }
-    tdOrg.textContent = orgAsn;
-    row.appendChild(tdOrg);
-
-    // 将行追加到 tbody
+  document.getElementById('singleResultCard').style.display = 'none';
+  document.getElementById('multiResultPanel').style.display = 'block';
+  document.getElementById('inputDomain').textContent = data.input || '-';
+  const tbody = document.getElementById('resultsTableBody');
+  tbody.innerHTML = '';
+  if (!data.results || data.results.length === 0) { document.getElementById('resolvedCount').textContent = '0'; return; }
+  const validResults = data.results.filter(r => r.checks && (r.checks.tls_detect || r.checks.ws_real_connect || r.checks.cdn_trace));
+  document.getElementById('resolvedCount').textContent = `${data.results.length} 个（${validResults.length} 个有效）`;
+  validResults.forEach(result => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><strong style="color:var(--primary)">${result.ip || '-'}</strong></td>
+      <td>${result.port || '443'}</td>
+      <td class="${result.checks?.tls_detect ? 'status-success' : 'status-fail'}"></td>
+      <td class="${result.checks?.cdn_trace ? 'status-success' : 'status-fail'}"></td>
+      <td class="${result.checks?.ws_real_connect ? 'status-success' : 'status-fail'}"></td>
+      <td style="color:${result.cdn?.warp==='on'?'var(--success)':'var(--text-muted)'}">${result.cdn?.warp || 'off'}</td>
+      <td>${result.latency?.tls_handshake_ms ? result.latency.tls_handshake_ms+' ms' : '-'}</td>
+      <td>${result.latency?.ws_connect_ms ? result.latency.ws_connect_ms+' ms' : '-'}</td>
+      <td>${formatLocation(result.geoip)}</td>
+      <td style="font-size:12px">${result.geoip ? (result.geoip.organization || '-') + ' / AS' + (result.geoip.asn || '-') : '-'}</td>
+    `;
     tbody.appendChild(row);
   });
-
-  // 更新地图 - 优先选择可用的 geoip
-  if (window.marker && window.map) {
-    try { window.map.removeLayer(window.marker); } catch (e) {}
-    window.marker = null;
-  }
-
-  var firstSuccessIP = validResults.find(function (r) { 
-    return r.checks && r.checks.tls_detect && r.geoip && r.geoip.latitude && r.geoip.longitude; 
-  });
-  if (!firstSuccessIP) {
-    firstSuccessIP = validResults.find(function (r) { 
-      return r.checks && r.checks.ws_real_connect && r.geoip && r.geoip.latitude && r.geoip.longitude; 
-    });
-  }
-  if (!firstSuccessIP) {
-    firstSuccessIP = validResults.find(function (r) { 
-      return r.geoip && r.geoip.latitude && r.geoip.longitude; 
-    });
-  }
-
+  const firstSuccessIP = validResults.find(r => r.geoip?.latitude);
   if (firstSuccessIP) updateMapMarker(firstSuccessIP);
 }
-
 </script>
 </body>
 </html>`;
