@@ -1191,11 +1191,11 @@ td.status-fail::before {
       <table id="resultsTable">
         <thead>
           <tr>
-            <th>IP 地址</th>
+            <th>IP</th>
             <th>端口</th>
             <th>TLS</th>
             <th>CDN</th>
-            <th>WebSocket</th>
+            <th>WS</th>
             <th>Warp</th>
             <th>TLS 延迟</th>
             <th>WS 延迟</th>
@@ -1406,7 +1406,7 @@ function updateInfo(data) {
     ["IP 地址", singleData.ip || "-"],
     ["端口", singleData.port || "-"],
     ["TLS 检测", singleData.checks?.tls_detect ? "✓ 成功" : "✕ 失败"],
-    ["CDN Trace", singleData.checks?.cdn_trace ? "✓ 是" : "✕ 否"],
+    ["CDN Trace", singleData.checks?.cdn_trace ? "✓ 成功" : "✕ 失败"],
     ["WebSocket 状态", singleData.checks?.ws_real_connect ? "✓ 连接成功" : "✕ 连接失败"],
     ["Warp 状态", singleData.cdn?.warp || "off"],
     ["TLS 延迟", singleData.latency?.tls_handshake_ms ? \`\${singleData.latency.tls_handshake_ms} ms\` : "-"],
@@ -2725,3 +2725,4 @@ function startServer() {
 
 
 startServer();
+
