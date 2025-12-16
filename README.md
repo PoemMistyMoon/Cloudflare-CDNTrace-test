@@ -3,6 +3,11 @@
 本项目基于 **[cf-proxyip-test](https://github.com/mountain787/cf-proxyip-test)** 二次修改而来，在此感谢！修改部分内容并且美化前端，同时适配竖屏界面，项目为前后端一体的单文件实现，开箱即用。
 
 ---
+**演示网站:[Cloudflare IP 远程检测工具](https://ipt.ssc.de5.net/iptest)**
+
+**注意!**  **显示网站不保证可用性!**
+
+---
 
 ## 项目简介
 
