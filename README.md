@@ -25,7 +25,7 @@
 支持能力：
 
 - TLS 连接检测
-- CDN Trace 检测
+- CDN Trace 检测(proxyip检测)
 - WebSocket 实际连接测试
 - Warp 状态识别
 - GeoIP / ASN 信息查询
