@@ -18,7 +18,8 @@ async function handleRequest(request) {
           .input-focus { transition: all 0.2s ease; border: 1px solid #e2e8f0; background: rgba(255, 255, 255, 0.5); }
           .input-focus:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); background: #fff; }
           
-          #targetList { min-height: 300px; resize: vertical; }
+          /* 调整输入框默认高度，从 300px 降至 160px */
+          #targetList { min-height: 160px; resize: vertical; }
           .resizable-textarea { min-height: 350px; resize: vertical; flex-grow: 1; }
           
           .btn-disabled { background-color: #94a3b8 !important; cursor: not-allowed; opacity: 0.7; pointer-events: none; }
@@ -58,7 +59,7 @@ async function handleRequest(request) {
       </style>
   </head>
   <body class="py-10 px-4">
-      <div class="max-w-6xl mx-auto">
+      <div class="max-w-4xl mx-auto">
           <div class="text-center mb-8">
               <h1 class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-2 md:mb-3 tracking-tight">☁️ CloudflareIP 批量检测工具</h1>
               <p class="text-sm md:text-base text-slate-500 font-medium">轻松高效 · 简约美观 · 并发控制</p>
@@ -190,13 +191,11 @@ async function handleRequest(request) {
                           const res = await fetch(url);
                           const data = await res.json();
                           
-                          // --- 适配多IP返回逻辑 ---
-                          // 如果存在 results 数组，则处理该数组；否则将当前对象包装成数组统一处理
+                          // 适配多 IP 逻辑
                           const resultsArray = data.results && Array.isArray(data.results) ? data.results : [data];
 
                           resultsArray.forEach(item => {
-                              // 注意：单IP模式下 ip 在根级，多IP模式下 ip 在 item 内
-                              const currentIp = item.ip || targetIp; 
+                              const currentIp = item.ip || targetIp;
                               const isOfficial = item.geoip && officialAsns.includes(item.geoip.asn);
 
                               if (item.checks?.cdn_trace === true && !isOfficial) {
@@ -212,7 +211,6 @@ async function handleRequest(request) {
                                   fCount++;
                               }
                           });
-                          // -----------------------
 
                       } catch (e) {
                           fOut.value += \`\${targetIp} 超时/错误\\n\`;
