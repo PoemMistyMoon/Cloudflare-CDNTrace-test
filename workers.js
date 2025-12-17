@@ -1,8 +1,8 @@
 addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
-  })
-  
-  async function handleRequest(request) {
+})
+
+async function handleRequest(request) {
     const html = `
   <!DOCTYPE html>
   <html lang="zh-CN">
@@ -60,8 +60,8 @@ addEventListener('fetch', event => {
   <body class="py-10 px-4">
       <div class="max-w-6xl mx-auto">
           <div class="text-center mb-8">
-              <h1 class="text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">网络节点批量检测</h1>
-              <p class="text-slate-500 font-medium">轻松高效 · 简约美观 · 并发控制</p>
+              <h1 class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-2 md:mb-3 tracking-tight">☁️ CloudflareIP 批量检测工具</h1>
+              <p class="text-sm md:text-base text-slate-500 font-medium">轻松高效 · 简约美观 · 并发控制</p>
           </div>
           <div class="glass-card p-8 mb-8 shadow-2xl">
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -157,7 +157,6 @@ addEventListener('fetch', event => {
                   return;
               }
 
-              // 定义需要拦截的官方 ASN
               const officialAsns = [132892, 202623, 395747, 394536, 14789, 13335];
   
               const btn = document.getElementById('btnStart');
@@ -191,22 +190,30 @@ addEventListener('fetch', event => {
                           const res = await fetch(url);
                           const data = await res.json();
                           
-                          // 检查 ASN 是否在官方列表中
-                          const isOfficial = data.geoip && officialAsns.includes(data.geoip.asn);
+                          // --- 适配多IP返回逻辑 ---
+                          // 如果存在 results 数组，则处理该数组；否则将当前对象包装成数组统一处理
+                          const resultsArray = data.results && Array.isArray(data.results) ? data.results : [data];
 
-                          if (data.checks?.cdn_trace === true && !isOfficial) {
-                              const country = data.geoip?.countryName || '未知国家';
-                              const city = data.geoip?.city || '';
-                              sOut.value += \`\${data.ip} \${country} \${city}\\n\`;
-                              sCount++;
-                          } else if (isOfficial) {
-                              // 如果是官方 ASN，显示为指定格式并归类到失败
-                              fOut.value += \`\${data.ip} CF官方IP\\n\`;
-                              fCount++;
-                          } else {
-                              fOut.value += \`\${targetIp} 无效\\n\`;
-                              fCount++;
-                          }
+                          resultsArray.forEach(item => {
+                              // 注意：单IP模式下 ip 在根级，多IP模式下 ip 在 item 内
+                              const currentIp = item.ip || targetIp; 
+                              const isOfficial = item.geoip && officialAsns.includes(item.geoip.asn);
+
+                              if (item.checks?.cdn_trace === true && !isOfficial) {
+                                  const country = item.geoip?.countryName || '未知国家';
+                                  const city = item.geoip?.city || '';
+                                  sOut.value += \`\${currentIp} \${country} \${city}\\n\`;
+                                  sCount++;
+                              } else if (isOfficial) {
+                                  fOut.value += \`\${currentIp} CF官方IP\\n\`;
+                                  fCount++;
+                              } else {
+                                  fOut.value += \`\${currentIp} 无效\\n\`;
+                                  fCount++;
+                              }
+                          });
+                          // -----------------------
+
                       } catch (e) {
                           fOut.value += \`\${targetIp} 超时/错误\\n\`;
                           fCount++;
@@ -231,4 +238,4 @@ addEventListener('fetch', event => {
   </html>
     `
     return new Response(html, { headers: { 'Content-Type': 'text/html;charset=UTF-8' } })
-  }
+}
